@@ -1,6 +1,7 @@
 == Welcome to Classifier
 
-Classifier is a general module to allow Bayesian and other types of classifications.
+Classifier Comes Alive is a general module to allow Bayesian and other types of classifications.
+It is a fork of the original Classifier gem, which appears to unmaintained as of a couple of years ago.
 
 == Download
 
@@ -16,10 +17,10 @@ If you would like to speed up LSI classification by at least 10x, please install
 GNU GSL:: http://www.gnu.org/software/gsl
 rb-gsl:: http://rb-gsl.rubyforge.org
 
-Notice that LSI will work without these libraries, but as soon as they are installed, Classifier will make use of them. No configuration changes are needed, we like to keep things ridiculously easy for you.
+Notice that LSI will work without these libraries, but as soon as they are installed, Classifier will make use of them. No configuration changes are needed.
 
 == Bayes
-A Bayesian classifier by Lucas Carlson. Bayesian Classifiers are accurate, fast, and have modest memory requirements.
+Bayesian Classifiers are accurate, fast, and have modest memory requirements.
 
 === Usage
     require 'classifier'
@@ -46,10 +47,8 @@ Using Madeleine, your application can persist the learned data over time.
 * http://www.paulgraham.com/spam.html
 
 == LSI
-A Latent Semantic Indexer by David Fayram. Latent Semantic Indexing engines
-are not as fast or as small as Bayesian classifiers, but are more flexible, providing 
-fast search and clustering detection as well as semantic analysis of the text that 
-theoretically simulates human learning.
+Latent Semantic Indexing engines are not as fast or as small as Bayesian classifiers, but are more flexible, providing 
+fast search and clustering detection as well as semantic analysis of the text that theoretically simulates human learning.
 
 === Usage
   require 'classifier'
@@ -79,10 +78,4 @@ with more than just simple strings.
 * http://www.chadfowler.com/index.cgi/Computing/LatentSemanticIndexing.rdoc
 * http://en.wikipedia.org/wiki/Latent_semantic_analysis
 
-== Authors    
-* Lucas Carlson  (mailto:lucas@rufy.com)
-* David Fayram II (mailto:dfayram@gmail.com)
-* Cameron McBride (mailto:cameron.mcbride@gmail.com)
-
 This library is released under the terms of the GNU LGPL. See LICENSE for more details.
-
