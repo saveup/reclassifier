@@ -1,7 +1,7 @@
 # ClassifierComesAlive
 
 Classifier Comes Alive is a gem to allow Bayesian and other types of classifications.
-It is a fork of the original Classifier gem, which appears to unmaintained as of a couple of years ago.
+It is a fork of the original [Classifier](https://github.com/cardmagic/classifier) gem, which appears to unmaintained as of a couple of years ago.
 
 ## Installation
 
