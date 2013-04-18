@@ -1,4 +1,4 @@
-module ClassifierComesAlive
+module Reclassifier
 
 # This is an internal data structure class for the LSI node. Save for
 # raw_vector_with, it should be fairly straightforward to understand.

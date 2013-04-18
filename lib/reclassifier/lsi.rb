@@ -1,6 +1,6 @@
 $GSL = true
 
-module ClassifierComesAlive
+module Reclassifier
 
   # This class implements a Latent Semantic Indexer, which can search, classify and cluster
   # data based on underlying semantic relations. For more information on the algorithms used,

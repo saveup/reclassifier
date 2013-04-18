@@ -1,4 +1,4 @@
-module ClassifierComesAlive
+module Reclassifier
   # This class keeps a word => index mapping. It is used to map stemmed words
   # to dimensions of a vector.
 

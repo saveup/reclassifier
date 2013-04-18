@@ -1,4 +1,4 @@
-module ClassifierComesAlive
+module Reclassifier
   class Bayes
     # The class can be created with one or more categories, each of which will be
     # initialized and given a training method. E.g.,

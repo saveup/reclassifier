@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'test_helper')
 
 class BayesTest < Test::Unit::TestCase
 	def setup
-		@classifier = ClassifierComesAlive::Bayes.new 'Interesting', 'Uninteresting'
+		@classifier = Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
 	end
 
 	def test_good_training

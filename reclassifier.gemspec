@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'classifier_comes_alive/version'
+require 'reclassifier/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "classifier_comes_alive"
-  spec.version       = ClassifierComesAlive::VERSION
+  spec.name          = "reclassifier"
+  spec.version       = Reclassifier::VERSION
   spec.authors       = ["Ryan Oblak"]
   spec.email         = ["rroblak@gmail.com"]
   spec.description   = %q{Bayesian and Latent Semantic Indexing classification of text.}
   spec.summary       = %q{Bayesian and Latent Semantic Indexing classification of text.}
-  spec.homepage      = "https://github.com/zenprogrammer/classifier_comes_alive"
+  spec.homepage      = "https://github.com/zenprogrammer/reclassifier"
   spec.license       = "LGPL"
 
   spec.files         = `git ls-files`.split($/)

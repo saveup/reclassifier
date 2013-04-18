@@ -12,7 +12,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_basic_indexing
-	 lsi = ClassifierComesAlive::LSI.new
+	 lsi = Reclassifier::LSI.new
 	  [@str1, @str2, @str3, @str4, @str5].each { |x| lsi << x }
 	  assert ! lsi.needs_rebuild?
 
@@ -22,7 +22,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_not_auto_rebuild
-	 lsi = ClassifierComesAlive::LSI.new :auto_rebuild => false
+	 lsi = Reclassifier::LSI.new :auto_rebuild => false
 	 lsi.add_item @str1, "Dog"
 	 lsi.add_item @str2, "Dog"
 	 assert lsi.needs_rebuild?
@@ -31,7 +31,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_basic_categorizing
-	  lsi = ClassifierComesAlive::LSI.new
+	  lsi = Reclassifier::LSI.new
 	  lsi.add_item @str2, "Dog"
 	  lsi.add_item @str3, "Cat"
 	  lsi.add_item @str4, "Cat"
@@ -43,8 +43,8 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_external_classifying
-	  lsi = ClassifierComesAlive::LSI.new
-	  bayes = ClassifierComesAlive::Bayes.new 'Dog', 'Cat', 'Bird'
+	  lsi = Reclassifier::LSI.new
+	  bayes = Reclassifier::Bayes.new 'Dog', 'Cat', 'Bird'
 	  lsi.add_item @str1, "Dog" ; bayes.train_dog @str1
 	  lsi.add_item @str2, "Dog" ; bayes.train_dog @str2
 	  lsi.add_item @str3, "Cat" ; bayes.train_cat @str3
@@ -60,7 +60,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_recategorize_interface
-	  lsi = ClassifierComesAlive::LSI.new
+	  lsi = Reclassifier::LSI.new
 	  lsi.add_item @str1, "Dog"
 	  lsi.add_item @str2, "Dog"
 	  lsi.add_item @str3, "Cat"
@@ -79,7 +79,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_search
-	  lsi = ClassifierComesAlive::LSI.new
+	  lsi = Reclassifier::LSI.new
 	  [@str1, @str2, @str3, @str4, @str5].each { |x| lsi << x }
 
 	  # Searching by content and text, note that @str2 comes up first, because
@@ -96,7 +96,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_serialize_safe
-    lsi = ClassifierComesAlive::LSI.new
+    lsi = Reclassifier::LSI.new
 	  [@str1, @str2, @str3, @str4, @str5].each { |x| lsi << x }
 
 	  lsi_md = Marshal.dump lsi
@@ -107,7 +107,7 @@ class LSITest < Test::Unit::TestCase
 	end
 
 	def test_keyword_search
-	  lsi = ClassifierComesAlive::LSI.new
+	  lsi = Reclassifier::LSI.new
 	  lsi.add_item @str1, "Dog"
 	  lsi.add_item @str2, "Dog"
 	  lsi.add_item @str3, "Cat"

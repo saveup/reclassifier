@@ -1,4 +1,4 @@
-# ClassifierComesAlive
+# Reclassifier
 
 Classifier Comes Alive is a gem to allow Bayesian and other types of classifications.
 It is a fork of the original [Classifier](https://github.com/cardmagic/classifier) gem, which appears to be unmaintained as of a couple of years ago.
@@ -7,7 +7,7 @@ It is a fork of the original [Classifier](https://github.com/cardmagic/classifie
 
 Add this line to your application's Gemfile:
 
-    gem 'classifier_comes_alive'
+    gem 'reclassifier'
 
 And then execute:
 
@@ -15,7 +15,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install classifier_comes_alive
+    $ gem install reclassifier
 
 ## Dependencies
 
