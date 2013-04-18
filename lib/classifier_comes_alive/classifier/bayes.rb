@@ -1,10 +1,4 @@
-# Author::    Lucas Carlson  (mailto:lucas@rufy.com)
-# Copyright:: Copyright (c) 2005 Lucas Carlson
-# License::   LGPL
-
-module Classifier
-
-class Bayes
+module ClassifierComesAlive::Bayes
   # The class can be created with one or more categories, each of which will be
   # initialized and given a training method. E.g.,
   #      b = Classifier::Bayes.new 'Interesting', 'Uninteresting', 'Spam'
@@ -130,6 +124,4 @@ class Bayes
 	end
 
 	alias append_category add_category
-end
-
 end
