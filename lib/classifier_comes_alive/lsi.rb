@@ -3,7 +3,6 @@ begin
 
    require 'gsl' # requires http://rb-gsl.rubyforge.org/
    require 'gsl/vector'
-   require 'gsl/matrix'
    $GSL = true
 
 rescue LoadError

@@ -1,9 +1,13 @@
+require 'matrix'
+require 'gsl'
+require 'gsl/vector'
+require 'fast-stemmer'
+
 require 'classifier_comes_alive/version'
 require 'classifier_comes_alive/core_ext/array'
 require 'classifier_comes_alive/core_ext/matrix'
 require 'classifier_comes_alive/core_ext/object'
 require 'classifier_comes_alive/core_ext/string'
-require 'gsl'
 
 module ClassifierComesAlive
   autoload :Bayes,       'classifier_comes_alive/bayes'

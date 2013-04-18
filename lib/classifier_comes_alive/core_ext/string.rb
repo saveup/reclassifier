@@ -9,7 +9,7 @@ class String
   end
 
   # Return a Hash of strings => ints. Each word in the string is stemmed,
-  # interned, and indexes to its frequency in the document.
+  # symbolized, and indexed to its frequency in the document.
 	def word_hash
 		word_hash_for_words(gsub(/[^\w\s]/,"").split + gsub(/[\w]/," ").split)
 	end
@@ -19,13 +19,11 @@ class String
 		word_hash_for_words gsub(/[^\w\s]/,"").split
 	end
 
-	private
-
 	def word_hash_for_words(words)
 		d = Hash.new
 		words.each do |word|
 			word.downcase! if word =~ /[\w]+/
-			key = word.stem.intern
+			key = word.stem.to_sym
 			if word =~ /[^\w]/ || ! CORPUS_SKIP_WORDS.include?(word) && word.length > 2
 				d[key] ||= 0
 				d[key] += 1
@@ -136,7 +134,7 @@ class String
    private
 
    def perform_lsi(chunks, count, separator)
-      lsi = Classifier::LSI.new :auto_rebuild => false
+      lsi = ClassifierComesAlive::LSI.new :auto_rebuild => false
       chunks.each { |chunk| lsi << chunk unless chunk.strip.empty? || chunk.strip.split.size == 1 }
       lsi.build_index
       summaries = lsi.highest_relative_content count

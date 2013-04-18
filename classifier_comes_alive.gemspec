@@ -8,7 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ClassifierComesAlive::VERSION
   spec.authors       = ["Ryan Oblak"]
   spec.email         = ["rroblak@gmail.com"]
-  spec.description   = %q{A general classifier module to allow Bayesian and other types of classifications.}
+  spec.description   = %q{Bayesian and Latent Semantic Indexing classification of text.}
+  spec.summary       = %q{Bayesian and Latent Semantic Indexing classification of text.}
   spec.homepage      = "https://github.com/zenprogrammer/classifier_comes_alive"
   spec.license       = "LGPL"
 
@@ -17,6 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'test-unit'
+
+  spec.add_dependency 'fast-stemmer'
+  spec.add_dependency 'gsl'
 end
