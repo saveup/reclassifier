@@ -2,17 +2,14 @@ begin
    raise LoadError if ENV['NATIVE_VECTOR'] == "true" # to test the native vector class, try `rake test NATIVE_VECTOR=true`
 
    require 'gsl' # requires http://rb-gsl.rubyforge.org/
-   require 'classifier/extensions/vector_serialize'
+   require 'gsl/vector'
+   require 'gsl/matrix'
    $GSL = true
 
 rescue LoadError
 	warn "Notice: for 10x faster LSI support, please install http://rb-gsl.rubyforge.org/"
-	require 'classifier/extensions/vector'
+	require 'classifier_comes_alive/core_ext/vector'
 end
-
-require 'classifier/lsi/word_list'
-require 'classifier/lsi/content_node'
-require 'classifier/lsi/summary'
 
 module ClassifierComesAlive
 
