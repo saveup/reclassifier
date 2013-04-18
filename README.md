@@ -1,6 +1,6 @@
 # Reclassifier
 
-Classifier Comes Alive is a gem to allow Bayesian and other types of classifications.
+Reclassifier is a gem that provides string classification via Naïve Bayes classification and Latent Semantic Indexing classification.
 It is a fork of the original [Classifier](https://github.com/cardmagic/classifier) gem, which appears to be unmaintained as of a couple of years ago.
 
 ## Installation
@@ -19,11 +19,7 @@ Or install it yourself as:
 
 ## Dependencies
 
-If you would like to speed up LSI classification by at least 10x, please install the following libraries:
-GNU GSL:: http://www.gnu.org/software/gsl
-rb-gsl:: http://rb-gsl.rubyforge.org
-
-Notice that LSI will work without these libraries, but as soon as they are installed, Classifier will make use of them. No configuration changes are needed.
+Currently you need to install the GNU GSL library in order to use Reclassifier: http://www.gnu.org/software/gsl
 
 ## Usage
 
@@ -31,15 +27,15 @@ Notice that LSI will work without these libraries, but as soon as they are insta
 Bayesian Classifiers are accurate, fast, and have modest memory requirements.
 
 #### Usage
-    require 'classifier'
-    b = Classifier::Bayes.new 'Interesting', 'Uninteresting'
+    require 'reclassifier'
+    b = Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
     b.train_interesting "here are some good words. I hope you love them"
     b.train_uninteresting "here are some bad words, I hate you"
     b.classify "I hate bad words and you" # returns 'Uninteresting'
     
     require 'madeleine'
     m = SnapshotMadeleine.new("bayes_data") {
-        Classifier::Bayes.new 'Interesting', 'Uninteresting'
+        Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
     }
     m.system.train_interesting "here are some good words. I hope you love them"
     m.system.train_uninteresting "here are some bad words, I hate you"
@@ -59,8 +55,8 @@ Latent Semantic Indexing engines are not as fast or as small as Bayesian classif
 fast search and clustering detection as well as semantic analysis of the text that theoretically simulates human learning.
 
 #### Usage
-    require 'classifier'
-    lsi = Classifier::LSI.new
+    require 'reclassifier'
+    lsi = Reclassifier::LSI.new
     strings = [ ["This text deals with dogs. Dogs.", :dog],
                 ["This text involves dogs too. Dogs! ", :dog],
                 ["This text revolves around cats. Cats.", :cat],
@@ -78,7 +74,7 @@ fast search and clustering detection as well as semantic analysis of the text th
     lsi.classify "This text is also about dogs!"
     # returns => :dog
   
-Please see the Classifier::LSI documentation for more information. It is possible to index, search and classify
+Please see the Reclassifier::LSI documentation for more information. It is possible to index, search and classify
 with more than just simple strings. 
 
 #### Latent Semantic Indexing
