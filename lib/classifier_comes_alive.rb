@@ -1,6 +1,7 @@
 require 'classifier_comes_alive/version'
 require 'classifier_comes_alive/core_ext/object'
 require 'classifier_comes_alive/core_ext/string'
+require 'classifier_comes_alive/core_ext/array'
 
 module ClassifierComesAlive
   autoload :Bayes, 'classifier_comes_alive/bayes'
