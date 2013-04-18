@@ -1,7 +1,3 @@
-# Author::    David Fayram  (mailto:dfayram@lensmen.net)
-# Copyright:: Copyright (c) 2005 David Fayram II
-# License::   LGPL
-
 begin
    raise LoadError if ENV['NATIVE_VECTOR'] == "true" # to test the native vector class, try `rake test NATIVE_VECTOR=true`
 
@@ -18,7 +14,7 @@ require 'classifier/lsi/word_list'
 require 'classifier/lsi/content_node'
 require 'classifier/lsi/summary'
 
-module Classifier
+module ClassifierComesAlive
 
   # This class implements a Latent Semantic Indexer, which can search, classify and cluster
   # data based on underlying semantic relations. For more information on the algorithms used,
