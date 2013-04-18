@@ -1,6 +1,9 @@
 # Reclassifier
 
-Reclassifier is a gem that provides string classification via Naïve Bayes classification and Latent Semantic Indexing classification.
+Reclassifier is a gem that provides [classification](http://en.wikipedia.org/wiki/Statistical_classification) of strings.
+
+Classification can be done via [Naïve Bayes](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) or [Latent Semantic Indexing](http://en.wikipedia.org/wiki/Latent_semantic_indexing).
+
 It is a fork of the original [Classifier](https://github.com/cardmagic/classifier) gem, which appears to be unmaintained as of a couple of years ago.
 
 ## Installation
@@ -44,12 +47,6 @@ Bayesian Classifiers are accurate, fast, and have modest memory requirements.
 
 Using Madeleine, your application can persist the learned data over time.
 
-#### Bayesian Classification
-
-* http://www.process.com/precisemail/bayesian_filtering.htm
-* http://en.wikipedia.org/wiki/Bayesian_filtering
-* http://www.paulgraham.com/spam.html
-
 ### LSI
 Latent Semantic Indexing engines are not as fast or as small as Bayesian classifiers, but are more flexible, providing 
 fast search and clustering detection as well as semantic analysis of the text that theoretically simulates human learning.
@@ -76,11 +73,6 @@ fast search and clustering detection as well as semantic analysis of the text th
   
 Please see the Reclassifier::LSI documentation for more information. It is possible to index, search and classify
 with more than just simple strings. 
-
-#### Latent Semantic Indexing
-* http://www.c2.com/cgi/wiki?LatentSemanticIndexing
-* http://www.chadfowler.com/index.cgi/Computing/LatentSemanticIndexing.rdoc
-* http://en.wikipedia.org/wiki/Latent_semantic_analysis
 
 ## Contributing
 
