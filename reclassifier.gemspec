@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["rroblak@gmail.com"]
   spec.description   = %q{Bayesian and Latent Semantic Indexing classification of text.}
   spec.summary       = %q{Bayesian and Latent Semantic Indexing classification of text.}
-  spec.homepage      = "https://github.com/zenprogrammer/reclassifier"
+  spec.homepage      = "https://github.com/saveup/reclassifier"
   spec.license       = "LGPL"
 
   spec.files         = `git ls-files`.split($/)
