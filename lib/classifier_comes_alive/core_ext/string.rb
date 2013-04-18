@@ -1,21 +1,15 @@
-# Author::    Lucas Carlson  (mailto:lucas@rufy.com)
-# Copyright:: Copyright (c) 2005 Lucas Carlson
-# License::   LGPL
-
-# These are extensions to the String class to provide convenience 
-# methods for the Classifier package.
 class String
-  
-  # Removes common punctuation symbols, returning a new string. 
+
+  # Removes common punctuation symbols, returning a new string.
   # E.g.,
   #   "Hello (greeting's), with {braces} < >...?".without_punctuation
   #   => "Hello  greetings   with  braces         "
   def without_punctuation
     tr( ',?.!;:"@#$%^&*()_=+[]{}\|<>/`~', " " ) .tr( "'\-", "")
   end
-  
+
   # Return a Hash of strings => ints. Each word in the string is stemmed,
-  # interned, and indexes to its frequency in the document.  
+  # interned, and indexes to its frequency in the document.
 	def word_hash
 		word_hash_for_words(gsub(/[^\w\s]/,"").split + gsub(/[\w]/," ").split)
 	end
@@ -24,9 +18,9 @@ class String
 	def clean_word_hash
 		word_hash_for_words gsub(/[^\w\s]/,"").split
 	end
-	
+
 	private
-	
+
 	def word_hash_for_words(words)
 		d = Hash.new
 		words.each do |word|
@@ -39,7 +33,7 @@ class String
 		end
 		return d
 	end
-	
+
 	CORPUS_SKIP_WORDS = [
       "a",
       "again",
