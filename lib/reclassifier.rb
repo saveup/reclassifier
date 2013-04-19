@@ -7,7 +7,6 @@ require 'gsl'
 require 'reclassifier/version'
 require 'reclassifier/core_ext/array'
 require 'reclassifier/core_ext/matrix'
-require 'reclassifier/core_ext/object'
 require 'reclassifier/core_ext/string'
 require 'gsl/vector'
 

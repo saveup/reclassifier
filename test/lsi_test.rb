@@ -44,7 +44,7 @@ class LSITest < Test::Unit::TestCase
 
 	def test_external_classifying
 	  lsi = Reclassifier::LSI.new
-	  bayes = Reclassifier::Bayes.new 'Dog', 'Cat', 'Bird'
+	  bayes = Reclassifier::Bayes.new :dog, :cat, :bird
 	  lsi.add_item @str1, "Dog" ; bayes.train_dog @str1
 	  lsi.add_item @str2, "Dog" ; bayes.train_dog @str2
 	  lsi.add_item @str3, "Cat" ; bayes.train_cat @str3

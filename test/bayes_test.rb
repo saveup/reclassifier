@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'test_helper')
 
 class BayesTest < Test::Unit::TestCase
 	def setup
-		@classifier = Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
+		@classifier = Reclassifier::Bayes.new :interesting, :uninteresting
 	end
 
 	def test_good_training
@@ -18,17 +18,19 @@ class BayesTest < Test::Unit::TestCase
 	end
 
 	def test_categories
-		assert_equal ['Interesting', 'Uninteresting'].sort, @classifier.categories.sort
+		assert_equal [:interesting, :uninteresting].sort, @classifier.categories.sort
 	end
 
 	def test_add_category
-		@classifier.add_category 'Test'
-		assert_equal ['Test', 'Interesting', 'Uninteresting'].sort, @classifier.categories.sort
+		@classifier.add_category :test
+		assert_equal [:test, :interesting, :uninteresting].sort, @classifier.categories.sort
 	end
 
 	def test_classification
 		@classifier.train_interesting "here are some good words. I hope you love them"
+
 		@classifier.train_uninteresting "here are some bad words, I hate you"
-		assert_equal 'Uninteresting', @classifier.classify("I hate bad words and you")
+
+		assert_equal :uninteresting, @classifier.classify("I hate bad words and you")
 	end
 end
