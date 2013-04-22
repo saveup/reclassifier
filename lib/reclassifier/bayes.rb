@@ -1,124 +1,137 @@
+#
+# Bayesian classifier for arbitrary text.
+#
+# Implementation is translated from
+# Introduction to Information Retrieval by Christopher D. Manning, Prabhakar Raghavan and Hinrich Schütze,
+# Cambridge University Press. 2008, ISBN 0521865719.
+#
 module Reclassifier
   class Bayes
-    # The class can be created with one or more categories, each of which will be
-    # initialized and given a training method.  The categories are specified as
+    # Can be created with zero or more classifications, each of which will be
+    # initialized and given a training method.  The classifications are specified as
     # symbols.  E.g.,
     #      b = Reclassifier::Bayes.new :interesting, :uninteresting, :spam
-    def initialize(*categories)
-      @categories = {}
+    def initialize(*classifications)
+      @classifications = {}
+      classifications.each {|classification| @classifications[classification] = {}}
 
-      @docs_in_category_count = {}
-
-      @total_words ||= 0
+      @docs_in_classification_count = {}
     end
 
     #
-    # Provides a general training method for all categories specified in Bayes#new
+    # Provides a general training method for all classifications specified in Bayes#new
     # For example:
-    #     b = Reclassifier::Bayes.new :this, :that, :the_other
+    #     b = Reclassifier::Bayes.new :this, :that
     #     b.train :this, "This text"
     #     b.train :that, "That text"
-    #     b.train :the_other, "The other text"
-    def train(category, text)
-      @docs_in_category[category] ||= 0
-      @docs_in_category[category] += 1
+    def train(classification, text)
+      ensure_classification_exists(classification)
+
+      @docs_in_classification_count[classification] ||= 0
+      @docs_in_classification_count[classification] += 1
 
       text.word_hash.each do |word, count|
-        @categories[category] ||= {}
-        @categories[category][word] ||= 0
+        @classifications[classification][word] ||= 0
 
-        @categories[category][word] += count
-
-        @total_words += count
+        @classifications[classification][word] += count
       end
     end
 
     #
-    # Provides an untraining method for all categories specified in Bayes#new
+    # Untrain a (classification, text) pair.
     # Be very careful with this method.
     #
     # For example:
     #     b = Reclassifier::Bayes.new :this, :that, :the_other
     #     b.train :this, "This text"
     #     b.untrain :this, "This text"
-    def untrain(category, text)
-      @docs_in_category_count[category] -= 1
+    def untrain(classification, text)
+      ensure_classification_exists(classification)
+
+      @docs_in_classification_count[classification] -= 1
 
       text.word_hash.each do |word, count|
-        if @total_words >= 0
-          orig = @categories[category][word]
-
-          @categories[category][word] ||= 0
-          @categories[category][word] -= count
-
-          if @categories[category][word] <= 0
-            @categories[category].delete(word)
-            count = orig
-          end
-
-          @total_words -= count
-        end
+        @classifications[classification][word] -= count if @classifications[classification].include?(word)
       end
     end
 
     #
-    # Returns the scores in each category the provided +text+. E.g.,
+    # Returns the scores of the specified text for each classification. E.g.,
     #    b.classifications "I hate bad words and you"
     #    =>  {"Uninteresting"=>-12.6997928013932, "Interesting"=>-18.4206807439524}
     # The largest of these scores (the one closest to 0) is the one picked out by #classify
-    def classifications(text)
+    def calculate_scores(text)
       scores = {}
 
-      @categories.each do |category, category_word_counts|
+      @classifications.each do |classification, classification_word_counts|
         # prior
-        scores[category] = Math.log(@docs_in_category_count[category])
-        scores[category] -= Math.log(@docs_in_category_count.values.reduce(:+))
+        scores[classification] = Math.log(@docs_in_classification_count[classification])
+        scores[classification] -= Math.log(@docs_in_classification_count.values.reduce(:+))
 
         # likelihood
-        text.each do |word, count|
-          if @categories.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.include?(word)
-            scores[category] += count * Math.log((category_word_counts[word] || 0) + 1)
+        text.word_hash.each do |word, count|
+          if @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.include?(word)
+            scores[classification] += count * Math.log((classification_word_counts[word] || 0) + 1)
 
-            scores[category] -= count * Math.log(category_word_counts.values.reduce(:+) + @categories.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.count)
+            scores[classification] -= count * Math.log(classification_word_counts.values.reduce(:+) + @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.count)
           end
         end
       end
 
-      puts scores.inspect
       scores
     end
 
     #
-    # Returns the classification of the provided +text+, which is one of the
-    # categories given in the initializer. E.g.,
+    # Returns the classification of the specified text, which is one of the
+    # classifications given in the initializer. E.g.,
     #    b.classify "I hate bad words and you"
     #    =>  :uninteresting
     def classify(text)
-      (classifications(text).sort_by { |a| -a[1] })[0][0]
+      calculate_scores(text).max_by {|classification| classification[1]}[0]
     end
 
     #
-    # Provides a list of category names
+    # Provides a list of classification names
     # For example:
-    #     b.categories
+    #     b.classifications
     #     =>   [:this, :that, :the_other]
-    def categories # :nodoc:
-      @categories.keys
+    def classifications
+      @classifications.keys
     end
 
     #
-    # Allows you to add categories to the classifier.
+    # Adds the classification to the classifier.
+    # Has no effect if the classification already existed.
+    # Returns the classification.
     # For example:
-    #     b.add_category "Not spam"
-    #
-    # WARNING: Adding categories to a trained classifier will
-    # result in an undertrained category that will tend to match
-    # more criteria than the trained selective categories. In short,
-    # try to initialize your categories at initialization.
-    def add_category(category)
-      @categories[category] = {}
+    #     b.add_classification(:not_spam)
+    def add_classification(classification)
+      @classifications[classification] ||= {}
+
+      classification
     end
 
-    alias append_category add_category
+    #
+    # Removes the classification from the classifier.
+    # Returns the classifier if the classification existed, else nil.
+    # For example:
+    #     b.remove_classification(:not_spam)
+    def remove_classification(classification)
+      return_value = if @classifications.include?(classification)
+                       classification
+                     else
+                       nil
+                     end
+
+      @classifications.delete(classification)
+
+      return_value
+    end
+
+    private
+
+      def ensure_classification_exists(classification)
+        raise Reclassifier::UnknownClassificationError unless @classifications.include?(classification)
+      end
   end
 end

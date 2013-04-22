@@ -11,8 +11,9 @@ require 'reclassifier/core_ext/string'
 require 'gsl/vector'
 
 module Reclassifier
-  autoload :Bayes,       'reclassifier/bayes'
-  autoload :LSI,         'reclassifier/lsi'
-  autoload :ContentNode, 'reclassifier/content_node'
-  autoload :WordList,    'reclassifier/word_list'
+  autoload :Bayes,                      'reclassifier/bayes'
+  autoload :LSI,                        'reclassifier/lsi'
+  autoload :ContentNode,                'reclassifier/content_node'
+  autoload :WordList,                   'reclassifier/word_list'
+  autoload :UnknownClassificationError, 'reclassifier/unknown_classification_error'
 end
