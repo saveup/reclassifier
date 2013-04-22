@@ -1,4 +1,4 @@
-require File.join(Dir.pwd, 'spec', 'spec_helper.rb')
+require 'spec_helper'
 
 describe Reclassifier::Bayes do
 	describe "classifications" do

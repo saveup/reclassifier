@@ -1,4 +1,4 @@
-require File.join(Dir.pwd, 'spec', 'spec_helper.rb')
+require 'spec_helper'
 
 describe Array do
   describe "sum_with_identity" do
