@@ -13,16 +13,15 @@ class Reclassifier::Bayes
   # an array of symbols.  Options are specified in a hash.
   #
   # Options:
-  # * :clean - If true, non-word characters (e.g. punctuation) will be removed.  Otherwise, non-word characters will be processed.  Default is false.
+  # * :clean - If false, punctuation will be included in the classifier.  Otherwise, punctuation will be omitted.  Default is true.
   #
   #      b = Reclassifier::Bayes.new([:interesting, :uninteresting, :spam], :clean => true)
   def initialize(classifications = [], options = {})
     @classifications = {}
-    classifications.each {|classification| @classifications[classification] = {}}
-
     @docs_in_classification_count = {}
-
     @options = options
+
+    classifications.each {|classification| add_classification(classification)}
   end
 
   #
@@ -34,10 +33,9 @@ class Reclassifier::Bayes
   def train(classification, text)
     ensure_classification_exists(classification)
 
-    @docs_in_classification_count[classification] ||= 0
     @docs_in_classification_count[classification] += 1
 
-    word_hash(text).each do |word, count|
+    smart_word_hash(text).each do |word, count|
       @classifications[classification][word] ||= 0
 
       @classifications[classification][word] += count
@@ -57,7 +55,7 @@ class Reclassifier::Bayes
 
     @docs_in_classification_count[classification] -= 1
 
-    word_hash(text).each do |word, count|
+    smart_word_hash(text).each do |word, count|
       @classifications[classification][word] -= count if @classifications[classification].include?(word)
     end
   end
@@ -76,11 +74,11 @@ class Reclassifier::Bayes
       scores[classification] -= Math.log(@docs_in_classification_count.values.reduce(:+))
 
       # likelihood
-      word_hash(text).each do |word, count|
+      smart_word_hash(text).each do |word, count|
         if @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.include?(word)
           scores[classification] += count * Math.log((classification_word_counts[word] || 0) + 1)
 
-          scores[classification] -= count * Math.log(classification_word_counts.values.reduce(:+) + @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.count)
+          scores[classification] -= count * Math.log(classification_word_counts.values.reduce(:+).to_i + @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.count)
         end
       end
     end
@@ -115,6 +113,8 @@ class Reclassifier::Bayes
   def add_classification(classification)
     @classifications[classification] ||= {}
 
+    @docs_in_classification_count[classification] ||= 0
+
     classification
   end
 
@@ -139,5 +139,13 @@ class Reclassifier::Bayes
 
     def ensure_classification_exists(classification)
       raise Reclassifier::UnknownClassificationError unless @classifications.include?(classification)
+    end
+
+    def smart_word_hash(string)
+      if @options[:clean] == false
+        word_hash(string)
+      else
+        clean_word_hash(string)
+      end
     end
 end

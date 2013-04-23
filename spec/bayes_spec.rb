@@ -59,6 +59,14 @@ describe Reclassifier::Bayes do
       scores[:in_china].should eq(-8.107690312843907)
       scores[:not_in_china].should eq(-8.906681345001262)
     end
+
+    it "should handle the case when no documents are classified for a particular classification" do
+      subject = described_class.new([:in_china, :not_in_china])
+
+      subject.train(:in_china, 'Chinese Beijing Chinese')
+
+      subject.calculate_scores('Chinese Beijing')
+    end
   end
 
   describe "add_classification" do
@@ -92,6 +100,35 @@ describe Reclassifier::Bayes do
 
     it "should return nil if the classification didn't exist" do
       subject.remove_classification(:niner).should be(nil)
+    end
+  end
+
+  context ':clean option' do
+    it 'should cause punctuation to be omitted if it is set to true' do
+      subject = described_class.new([:one, :other], {:clean => true})
+
+      subject.train(:one, '! ! ! ! bbb')
+      subject.train(:other, 'aaa')
+
+      subject.classify('! aaa !').should eq(:other)
+    end
+
+    it 'should default to true' do
+      subject = described_class.new([:one, :other])
+
+      subject.train(:one, '! ! ! ! bbb')
+      subject.train(:other, 'aaa')
+
+      subject.classify('! aaa !').should eq(:other)
+    end
+
+    it 'should cause punctuation not to be omitted if it is set to false' do
+      subject = described_class.new([:one, :other], {:clean => false})
+
+      subject.train(:one, '! ! ! ! bbb')
+      subject.train(:other, 'aaa')
+
+      subject.classify('! aaa !').should eq(:one)
     end
   end
 end
