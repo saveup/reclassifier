@@ -2,7 +2,7 @@
 # Bayesian classifier for arbitrary text.
 #
 # Implementation is translated from
-# Introduction to Information Retrieval by Christopher D. Manning, Prabhakar Raghavan and Hinrich Schütze,
+# <em>Introduction to Information Retrieval</em> by Christopher D. Manning, Prabhakar Raghavan and Hinrich Schütze,
 # Cambridge University Press. 2008, ISBN 0521865719.
 #
 class Reclassifier::Bayes
