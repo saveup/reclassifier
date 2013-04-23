@@ -1,13 +1,5 @@
 class String
 
-  # Removes common punctuation symbols, returning a new string.
-  # E.g.,
-  #   "Hello (greeting's), with {braces} < >...?".without_punctuation
-  #   => "Hello  greetings   with  braces         "
-  def without_punctuation
-    tr( ',?.!;:"@#$%^&*()_=+[]{}\|<>/`~', " " ) .tr( "'\-", "")
-  end
-
   # Return a Hash of strings => ints. Each word in the string is stemmed,
   # symbolized, and indexed to its frequency in the document.
 	def word_hash
