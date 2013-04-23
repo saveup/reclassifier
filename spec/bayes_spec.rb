@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reclassifier::Bayes do
 	describe "classifications" do
     it "should return the classifications" do
-      subject = described_class.new(:interesting, :uninteresting)
+      subject = described_class.new([:interesting, :uninteresting])
 
       subject.classifications.sort.should eq([:interesting, :uninteresting])
     end
@@ -15,7 +15,7 @@ describe Reclassifier::Bayes do
     end
 
     it "should train the classifier to the (classification, document) pair" do
-      subject = described_class.new(:in_china, :not_in_china)
+      subject = described_class.new([:in_china, :not_in_china])
 
       subject.train(:in_china, 'Chinese Beijing Chinese')
       subject.train(:in_china, 'Chinese Chinese Shanghai')
@@ -32,7 +32,7 @@ describe Reclassifier::Bayes do
     end
 
     it "should untrain the classifier against the (classification, document) pair" do
-      subject = described_class.new(:in_china, :not_in_china)
+      subject = described_class.new([:in_china, :not_in_china])
 
       subject.train(:in_china, 'Chinese Chinese')
       subject.train(:not_in_china, 'Chinese Macao')
@@ -47,7 +47,7 @@ describe Reclassifier::Bayes do
 
   describe "calculate_scores" do
     it "should return a score hash with the correct scores" do
-      subject = described_class.new(:in_china, :not_in_china)
+      subject = described_class.new([:in_china, :not_in_china])
 
       subject.train(:in_china, 'Chinese Beijing Chinese')
       subject.train(:in_china, 'Chinese Chinese Shanghai')

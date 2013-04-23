@@ -12,8 +12,9 @@ require 'gsl/vector'
 
 module Reclassifier
   autoload :Bayes,                      'reclassifier/bayes'
-  autoload :LSI,                        'reclassifier/lsi'
   autoload :ContentNode,                'reclassifier/content_node'
-  autoload :WordList,                   'reclassifier/word_list'
+  autoload :LSI,                        'reclassifier/lsi'
   autoload :UnknownClassificationError, 'reclassifier/unknown_classification_error'
+  autoload :WordHash,                   'reclassifier/word_hash'
+  autoload :WordList,                   'reclassifier/word_list'
 end

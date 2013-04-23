@@ -6,15 +6,23 @@
 # Cambridge University Press. 2008, ISBN 0521865719.
 #
 class Reclassifier::Bayes
+  include Reclassifier::WordHash
+
   # Can be created with zero or more classifications, each of which will be
   # initialized and given a training method.  The classifications are specified as
-  # symbols.  E.g.,
-  #      b = Reclassifier::Bayes.new :interesting, :uninteresting, :spam
-  def initialize(*classifications)
+  # an array of symbols.  Options are specified in a hash.
+  #
+  # Options:
+  # * :clean - If true, non-word characters (e.g. punctuation) will be removed.  Otherwise, non-word characters will be processed.  Default is false.
+  #
+  #      b = Reclassifier::Bayes.new([:interesting, :uninteresting, :spam], :clean => true)
+  def initialize(classifications = [], options = {})
     @classifications = {}
     classifications.each {|classification| @classifications[classification] = {}}
 
     @docs_in_classification_count = {}
+
+    @options = options
   end
 
   #
@@ -29,7 +37,7 @@ class Reclassifier::Bayes
     @docs_in_classification_count[classification] ||= 0
     @docs_in_classification_count[classification] += 1
 
-    text.word_hash.each do |word, count|
+    word_hash(text).each do |word, count|
       @classifications[classification][word] ||= 0
 
       @classifications[classification][word] += count
@@ -49,7 +57,7 @@ class Reclassifier::Bayes
 
     @docs_in_classification_count[classification] -= 1
 
-    text.word_hash.each do |word, count|
+    word_hash(text).each do |word, count|
       @classifications[classification][word] -= count if @classifications[classification].include?(word)
     end
   end
@@ -68,7 +76,7 @@ class Reclassifier::Bayes
       scores[classification] -= Math.log(@docs_in_classification_count.values.reduce(:+))
 
       # likelihood
-      text.word_hash.each do |word, count|
+      word_hash(text).each do |word, count|
         if @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.include?(word)
           scores[classification] += count * Math.log((classification_word_counts[word] || 0) + 1)
 

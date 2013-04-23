@@ -45,7 +45,7 @@ describe Reclassifier::LSI do
   end
 
   it "should perform better than Bayes" do
-	  bayes = Reclassifier::Bayes.new :dog, :cat, :bird
+	  bayes = Reclassifier::Bayes.new([:dog, :cat, :bird])
 
     [[@str1, "Dog"],
  		 [@str2, "Dog"],
