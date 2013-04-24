@@ -1,7 +1,6 @@
 # gems
 require 'fast-stemmer'
 require 'gsl'
-require 'jsonable'
 require 'matrix'
 
 # files

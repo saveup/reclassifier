@@ -24,5 +24,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'fast-stemmer'
   spec.add_dependency 'gsl'
-  spec.add_dependency 'jsonable'
 end

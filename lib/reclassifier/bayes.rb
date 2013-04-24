@@ -6,7 +6,6 @@
 # Cambridge University Press. 2008, ISBN 0521865719.
 #
 class Reclassifier::Bayes
-  include Jsonable
   include Reclassifier::WordHash
 
   # Can be created with zero or more classifications, each of which will be
