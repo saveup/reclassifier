@@ -1,7 +1,8 @@
 # gems
-require 'matrix'
 require 'fast-stemmer'
 require 'gsl'
+require 'jsonable'
+require 'matrix'
 
 # files
 require 'reclassifier/version'

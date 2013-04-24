@@ -131,4 +131,8 @@ describe Reclassifier::Bayes do
       subject.classify('! aaa !').should eq(:one)
     end
   end
+
+  it 'should include the Jsonable module' do
+    described_class.ancestors.include?(Jsonable).should be(true)
+  end
 end
