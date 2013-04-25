@@ -2,8 +2,11 @@
 # Bayesian classifier for arbitrary text.
 #
 # Implementation is translated from
-# <em>Introduction to Information Retrieval</em> by Christopher D. Manning, Prabhakar Raghavan and Hinrich Schütze,
-# Cambridge University Press. 2008, ISBN 0521865719.
+# <em>Introduction to Information Retrieval</em> by Christopher D. Manning,
+# Prabhakar Raghavan and Hinrich Schütze, # Cambridge University Press. 2008,
+# ISBN 0521865719.
+#
+# Derived quantities are cached to improve performance of repeated #classify calls.
 #
 class Reclassifier::Bayes
   include Reclassifier::WordHash
@@ -33,7 +36,7 @@ class Reclassifier::Bayes
   def train(classification, text)
     ensure_classification_exists(classification)
 
-    @docs_in_classification_count[classification] += 1
+    update_doc_count(classification, 1)
 
     smart_word_hash(text).each do |word, count|
       @classifications[classification][word] ||= 0
@@ -53,7 +56,7 @@ class Reclassifier::Bayes
   def untrain(classification, text)
     ensure_classification_exists(classification)
 
-    @docs_in_classification_count[classification] -= 1
+    update_doc_count(classification, -1)
 
     smart_word_hash(text).each do |word, count|
       @classifications[classification][word] -= count if @classifications[classification].include?(word)
@@ -68,17 +71,21 @@ class Reclassifier::Bayes
   def calculate_scores(text)
     scores = {}
 
+    @cache[:total_docs_classified_log] ||= Math.log(@docs_in_classification_count.values.reduce(:+))
+    @cache[:words_classified] ||= @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}
+
     @classifications.each do |classification, classification_word_counts|
       # prior
       scores[classification] = Math.log(@docs_in_classification_count[classification])
-      scores[classification] -= Math.log(@docs_in_classification_count.values.reduce(:+))
+      scores[classification] -= @cache[:total_docs_classified_log]
 
       # likelihood
+      classification_word_count = classification_word_counts.values.reduce(:+).to_i
       smart_word_hash(text).each do |word, count|
-        if @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.include?(word)
+        if @cache[:words_classified].include?(word)
           scores[classification] += count * Math.log((classification_word_counts[word] || 0) + 1)
 
-          scores[classification] -= count * Math.log(classification_word_counts.values.reduce(:+).to_i + @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}.count)
+          scores[classification] -= count * Math.log(classification_word_count + @cache[:words_classified].count)
         end
       end
     end
@@ -135,7 +142,52 @@ class Reclassifier::Bayes
     return_value
   end
 
+  # Invalidates the cache.
+  #
+  #   classifier = Reclassifier::Bayes.new([:one, :other])
+  #
+  #   classifier.train(:one, 'bbb')
+  #   classifier.train(:other, 'aaa')
+  #
+  #   classifier.classify('aaa')
+  #
+  #   classifier.cache_set?
+  #   =>  true
+  #
+  #   classifier.invalidate_cache
+  #
+  #   classifier.cache_set?
+  #   =>  false
+  #
+  def invalidate_cache
+    @cache = {}
+  end
+
+  # Returns true if the cache has been set (i.e. #classify has been run).
+  # Returns false otherwise.
+  #   classifier = Reclassifier::Bayes.new([:one, :other])
+  #
+  #   classifier.cache_set?
+  #   =>  false
+  #
+  #   classifier.train(:one, 'bbb')
+  #   classifier.train(:other, 'aaa')
+  #
+  #   classifier.classify('aaa')
+  #
+  #   classifier.cache_set?
+  #   =>  true
+  #
+  def cache_set?
+    @cache.present?
+  end
+
   private
+    def update_doc_count(classification, value)
+      @docs_in_classification_count[classification] += value
+
+      invalidate_cache
+    end
 
     def ensure_classification_exists(classification)
       raise Reclassifier::UnknownClassificationError unless @classifications.include?(classification)

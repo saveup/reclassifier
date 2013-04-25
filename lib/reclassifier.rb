@@ -2,6 +2,7 @@
 require 'fast-stemmer'
 require 'gsl'
 require 'matrix'
+require 'active_support/core_ext/object/blank'
 
 # files
 require 'reclassifier/version'
