@@ -18,7 +18,8 @@ class Reclassifier::Bayes
   # Options:
   # * :clean - If false, punctuation will be included in the classifier.  Otherwise, punctuation will be omitted.  Default is true.
   #
-  #      b = Reclassifier::Bayes.new([:interesting, :uninteresting, :spam], :clean => true)
+  #
+  #  b = Reclassifier::Bayes.new([:interesting, :uninteresting, :spam], :clean => true)
   #
   def initialize(classifications = [], options = {})
     @classifications = {}
@@ -31,9 +32,9 @@ class Reclassifier::Bayes
   #
   # Provides a general training method for all classifications specified in Bayes#new
   #
-  #     b = Reclassifier::Bayes.new([:this, :that])
-  #     b.train(:this, "This text")
-  #     b.train(:that, "That text")
+  #  b = Reclassifier::Bayes.new([:this, :that])
+  #  b.train(:this, "This text")
+  #  b.train(:that, "That text")
   #
   def train(classification, text)
     ensure_classification_exists(classification)
@@ -51,9 +52,9 @@ class Reclassifier::Bayes
   # Untrain a (classification, text) pair.
   # Be very careful with this method.
   #
-  #     b = Reclassifier::Bayes.new([:this, :that])
-  #     b.train(:this, "This text")
-  #     b.untrain(:this, "This text")
+  #  b = Reclassifier::Bayes.new([:this, :that])
+  #  b.train(:this, "This text")
+  #  b.untrain(:this, "This text")
   #
   def untrain(classification, text)
     ensure_classification_exists(classification)
@@ -67,8 +68,8 @@ class Reclassifier::Bayes
 
   # Returns the scores of the specified text for each classification.
   #
-  #    b.calculate_scores("I hate bad words and you")
-  #    =>  {"Uninteresting"=>-12.6997928013932, "Interesting"=>-18.4206807439524}
+  #  b.calculate_scores("I hate bad words and you")
+  #  =>  {"Uninteresting"=>-12.6997928013932, "Interesting"=>-18.4206807439524}
   #
   # The largest of these scores (the one closest to 0) is the one picked out by #classify
   #
@@ -100,8 +101,8 @@ class Reclassifier::Bayes
   # Returns the classification of the specified text, which is one of the
   # classifications given in the initializer.
   #
-  #    b.classify("I hate bad words and you")
-  #    =>  :uninteresting
+  #  b.classify("I hate bad words and you")
+  #  =>  :uninteresting
   #
   def classify(text)
     calculate_scores(text).max_by {|classification| classification[1]}[0]
@@ -109,8 +110,8 @@ class Reclassifier::Bayes
 
   # Provides a list of classification names
   #
-  #     b.classifications
-  #     =>   [:this, :that, :the_other]
+  #  b.classifications
+  #  =>   [:this, :that, :the_other]
   #
   def classifications
     @classifications.keys
@@ -120,7 +121,8 @@ class Reclassifier::Bayes
   # Has no effect if the classification already existed.
   # Returns the classification.
   #
-  #     b.add_classification(:not_spam)
+  #  b.add_classification(:not_spam)
+  #  =>  :not_spam
   #
   def add_classification(classification)
     @classifications[classification] ||= {}
@@ -134,7 +136,8 @@ class Reclassifier::Bayes
   # Removes the classification from the classifier.
   # Returns the classifier if the classification existed, else nil.
   #
-  #     b.remove_classification(:not_spam)
+  #  b.remove_classification(:not_spam)
+  #  =>  :not_spam
   #
   def remove_classification(classification)
     return_value = if @classifications.include?(classification)
@@ -150,20 +153,20 @@ class Reclassifier::Bayes
 
   # Invalidates the cache.
   #
-  #   classifier = Reclassifier::Bayes.new([:one, :other])
+  #  classifier = Reclassifier::Bayes.new([:one, :other])
   #
-  #   classifier.train(:one, 'bbb')
-  #   classifier.train(:other, 'aaa')
+  #  classifier.train(:one, 'bbb')
+  #  classifier.train(:other, 'aaa')
   #
-  #   classifier.classify('aaa')
+  #  classifier.classify('aaa')
   #
-  #   classifier.cache_set?
-  #   =>  true
+  #  classifier.cache_set?
+  #  =>  true
   #
-  #   classifier.invalidate_cache
+  #  classifier.invalidate_cache
   #
-  #   classifier.cache_set?
-  #   =>  false
+  #  classifier.cache_set?
+  #  =>  false
   #
   def invalidate_cache
     @cache = {}
@@ -171,18 +174,19 @@ class Reclassifier::Bayes
 
   # Returns true if the cache has been set (i.e. #classify has been run).
   # Returns false otherwise.
-  #   classifier = Reclassifier::Bayes.new([:one, :other])
   #
-  #   classifier.cache_set?
-  #   =>  false
+  #  classifier = Reclassifier::Bayes.new([:one, :other])
   #
-  #   classifier.train(:one, 'bbb')
-  #   classifier.train(:other, 'aaa')
+  #  classifier.cache_set?
+  #  =>  false
   #
-  #   classifier.classify('aaa')
+  #  classifier.train(:one, 'bbb')
+  #  classifier.train(:other, 'aaa')
   #
-  #   classifier.cache_set?
-  #   =>  true
+  #  classifier.classify('aaa')
+  #
+  #  classifier.cache_set?
+  #  =>  true
   #
   def cache_set?
     @cache.present?
