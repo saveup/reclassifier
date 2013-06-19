@@ -13,6 +13,17 @@ describe Reclassifier::Bayes do
     end
   end
 
+  describe 'classify' do
+    it 'should handle a nil text gracefully' do
+      classifier = Reclassifier::Bayes.new([:in_china, :not_in_china])
+
+      classifier.train(:in_china, 'Chinese Macao')
+      classifier.train(:not_in_china, 'Tokyo Japan Chinese')
+
+      classifier.classify(nil)
+    end
+  end
+
 	describe "classifications" do
     it "should return the classifications" do
       classifier = Reclassifier::Bayes.new([:interesting, :uninteresting])

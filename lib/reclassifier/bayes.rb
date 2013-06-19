@@ -105,7 +105,7 @@ class Reclassifier::Bayes
   #  =>  :uninteresting
   #
   def classify(text)
-    calculate_scores(text).max_by {|classification| classification[1]}[0]
+    calculate_scores(text.to_s).max_by {|classification| classification[1]}[0]
   end
 
   # Provides a list of classification names
