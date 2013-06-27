@@ -1,3 +1,6 @@
+# stdlib
+require 'set'
+
 # gems
 require 'fast-stemmer'
 require 'matrix'
