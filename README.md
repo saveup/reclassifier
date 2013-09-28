@@ -31,21 +31,20 @@ Bayesian Classifiers are accurate, fast, and have modest memory requirements.
 
 #### Usage
     require 'reclassifier'
-    b = Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
-    b.train_interesting "here are some good words. I hope you love them"
-    b.train_uninteresting "here are some bad words, I hate you"
-    b.classify "I hate bad words and you" # returns 'Uninteresting'
+    b = Reclassifier::Bayes.new ['interesting', 'uninteresting']
+    b.train 'interesting', 'here are some good words. I hope you love them'
+    b.train 'uninteresting', 'here are some bad words, I hate you'
+    puts b.classify 'I hate bad words and you' # returns 'uninteresting'
     
-    require 'madeleine'
     m = SnapshotMadeleine.new("bayes_data") {
-        Reclassifier::Bayes.new 'Interesting', 'Uninteresting'
+        Reclassifier::Bayes.new ['interesting', 'uninteresting']
     }
-    m.system.train_interesting "here are some good words. I hope you love them"
-    m.system.train_uninteresting "here are some bad words, I hate you"
+    m.system.train 'interesting', 'here are some good words. I hope you love them'
+    m.system.train 'uninteresting', 'here are some bad words, I hate you'
     m.take_snapshot
-    m.system.classify "I love you" # returns 'Interesting'
+    puts m.system.classify 'I love you' # returns 'interesting'
 
-Using Madeleine, your application can persist the learned data over time.
+Using Madeleine, your application can persist the learned data over time.  If you get a "Sanity check failed for file IO" error, you may need to update Madeleine to the latest version available from GitHub.
 
 ### LSI
 Latent Semantic Indexing engines are not as fast or as small as Bayesian classifiers, but are more flexible, providing 
