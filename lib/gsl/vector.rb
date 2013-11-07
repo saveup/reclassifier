@@ -1,3 +1,5 @@
+require 'gsl'
+
 module GSL
   class Vector
     def _dump(v)
