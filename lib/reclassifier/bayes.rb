@@ -22,11 +22,11 @@ class Reclassifier::Bayes
   #  b = Reclassifier::Bayes.new([:interesting, :uninteresting, :spam], :clean => true)
   #
   def initialize(classifications = [], options = {})
-    @classifications = {}
-    @docs_in_classification_count = {}
+    @classifications = Hash.new {|h, k| h[k] = Hash.new(0)}
+    @docs_in_classification_count = Hash.new(0)
     @options = options
 
-    classifications.each {|classification| add_classification(classification)}
+    classifications.each {|classification| @classifications[classification]}
   end
 
   #
@@ -42,8 +42,6 @@ class Reclassifier::Bayes
     update_doc_count(classification, 1)
 
     smart_word_hash(text).each do |word, count|
-      @classifications[classification][word] ||= 0
-
       @classifications[classification][word] += count
     end
   end
@@ -74,7 +72,7 @@ class Reclassifier::Bayes
   # The largest of these scores (the one closest to 0) is the one picked out by #classify
   #
   def calculate_scores(text)
-    scores = {}
+    scores = Hash.new(0.0)
 
     @cache[:total_docs_classified_log] ||= Math.log(@docs_in_classification_count.values.reduce(:+))
     @cache[:words_classified] ||= @classifications.values.reduce(Set.new) {|set, word_counts| set.merge(word_counts.keys)}
@@ -125,9 +123,7 @@ class Reclassifier::Bayes
   #  =>  :not_spam
   #
   def add_classification(classification)
-    @classifications[classification] ||= {}
-
-    @docs_in_classification_count[classification] ||= 0
+    @classifications[classification] = Hash.new(0)
 
     classification
   end
@@ -169,7 +165,7 @@ class Reclassifier::Bayes
   #  =>  false
   #
   def invalidate_cache
-    @cache = {}
+    @cache = Hash.new
   end
 
   # Returns true if the cache has been set (i.e. #classify has been run).
