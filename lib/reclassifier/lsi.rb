@@ -236,11 +236,10 @@ module Reclassifier
       icutoff = (@items.size * cutoff).round
       carry = proximity_array_for_content( doc, &block )
       carry = carry[0..icutoff-1]
-      votes = {}
+      votes = Hash.new(0.0)
       carry.each do |pair|
         categories = @items[pair[0]].categories
         categories.each do |category|
-          votes[category] ||= 0.0
           votes[category] += pair[1]
         end
       end

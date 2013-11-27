@@ -16,7 +16,7 @@ module Reclassifier::WordHash
 	end
 
 	def word_hash_for_words(words)
-		d = {}
+		d = Hash.new(0)
 
 		words.each do |word|
 			word.downcase!
@@ -24,7 +24,6 @@ module Reclassifier::WordHash
 			key = word.stem.to_sym
 
 			if word =~ /[^\w]/ || !CORPUS_SKIP_WORDS.include?(word) && word.length > 2
-				d[key] ||= 0
 				d[key] += 1
 			end
 		end
